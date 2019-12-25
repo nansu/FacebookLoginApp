@@ -39,7 +39,7 @@ class ViewController: UIViewController {
     }
     
     func getDetails() {
-        let graphRequest = GraphRequest(graphPath: "me", parameters: ["fields": "name, picture"], tokenString: AccessToken.current?.tokenString, version: Settings.defaultGraphAPIVersion, httpMethod: HTTPMethod.get)
+        let graphRequest = GraphRequest(graphPath: "me", parameters: ["fields": "name, picture.width(640).height(480)"], tokenString: AccessToken.current?.tokenString, version: Settings.defaultGraphAPIVersion, httpMethod: HTTPMethod.get)
 
         let connection = GraphRequestConnection()
 
