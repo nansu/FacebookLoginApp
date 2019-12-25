@@ -50,9 +50,40 @@ class ViewController: UIViewController {
             } else {
                 //do something with result
                 print("Data returned")
-                let dictionary = result as? NSDictionary
-                let name = dictionary?.object(forKey: "name")
-                let picture = dictionary?.object(forKey: "picture")
+                
+                /*
+                 data format
+                 ["id": 123, "name": "nsu",
+                 "picture": {
+                    data = {
+                        url = "http://www.facebook.com/myprofileimage";
+                        height = 50;
+                        width = 50;
+                    }
+                 }]
+                 */
+                
+                guard let responseDictionary = result as? NSDictionary else { return }
+                
+                let name = responseDictionary["name"] as? String
+                self.nameLabel.text = name
+                
+                guard let picture = responseDictionary["picture"] as? NSDictionary else { return }
+                
+                guard let data = picture["data"] as? NSDictionary else { return }
+                
+                guard let urlString = data["url"] as? String else { return }
+                
+                guard let url = URL(string: urlString) else { return }
+                DispatchQueue.global().async {
+                    guard let data = try? Data(contentsOf: url) else { return }
+                    DispatchQueue.main.async {
+                        let image = UIImage(data: data)
+                        self.photoImgView.image = image
+                    }
+                }
+                
+                
             }
 
         })
